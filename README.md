@@ -1,6 +1,6 @@
-# Student Management System - Kubernetes Microservices Deployment
+# Kubernetes, DevOps & FinOps Microservices NAGP Assignment
 
-This project demonstrates a production-ready multi-tier application architecture deployed on Kubernetes, featuring a Spring Boot REST API service backed by a MySQL database. The implementation showcases core Kubernetes concepts including service discovery, configuration management, persistent storage, horizontal pod autoscaling, and FinOps best practices.
+This project demonstrates a multi-tier application architecture deployed on Kubernetes, featuring a Spring Boot REST API service backed by a MySQL database. The implementation showcases core Kubernetes concepts including service discovery, configuration management, persistent storage, horizontal pod autoscaling, and FinOps best practices.
 
 ## Architecture Overview
 
@@ -8,12 +8,12 @@ The system implements a two-tier architecture:
 - **API Service Tier**: Spring Boot REST API exposing student data endpoints
 - **Database Tier**: MySQL database with persistent volume for data storage
 
-Both tiers are containerized using Docker and orchestrated on Google Kubernetes Engine (GKE), demonstrating enterprise-grade deployment patterns.
+Both tiers are containerized using Docker and orchestrated on Google Kubernetes Engine (GKE).
 
 ## Technology Stack
 
-- **Backend**: Java 11, Spring Boot 2.x
-- **Database**: MySQL 5.7
+- **Backend**: Java, Spring Boot 
+- **Database**: MySQL 
 - **Containerization**: Docker
 - **Orchestration**: Kubernetes (Google Kubernetes Engine)
 - **Build Tool**: Maven
@@ -23,8 +23,12 @@ Both tiers are containerized using Docker and orchestrated on Google Kubernetes 
 
 The Spring Boot application has been containerized and published to Docker Hub for deployment:
 
+**Code Repository**: [https://github.com/Khushboo09/nagpkubernetes](https://github.com/Khushboo09/nagpkubernetes)
 **Docker Hub Repository**: [khushboo091991/studentservice](https://hub.docker.com/r/khushboo091991/studentservice)  
 **Image Tag**: `khushboo091991/studentservice:0.0.1`
+**Image Tag**: `khushboo091991/studentservice:0.0.2`
+
+**Service API URL Example**: `http://<INGRESS-IP>/students`
 
 ## Project Structure
 
@@ -130,7 +134,7 @@ This deployment implements several cost optimization strategies:
 ## Prerequisites
 
 - Google Cloud Platform account with billing enabled
-- GKE cluster provisioned (1.21+ recommended)
+- GKE cluster provisioned 
 - `kubectl` CLI installed and configured
 - `gcloud` CLI authenticated
 - NGINX Ingress Controller installed on cluster
@@ -140,8 +144,8 @@ This deployment implements several cost optimization strategies:
 ### Step 1: Clone the Repository
 
 ```bash
-git clone <your-repository-url>
-cd nagpkubernates-main5
+git clone https://github.com/Khushboo09/nagpkubernetes.git
+cd nagpkubernetes
 ```
 
 ### Step 2: Connect to GKE Cluster
@@ -391,38 +395,6 @@ Or delete the entire namespace (if using a dedicated namespace):
 
 ```bash
 kubectl delete namespace <your-namespace>
-```
-
-## Troubleshooting
-
-### Pods Not Starting
-
-```bash
-# Check pod status and events
-kubectl describe pod <pod-name>
-
-# View pod logs
-kubectl logs <pod-name>
-```
-
-### Database Connection Issues
-
-```bash
-# Verify database is accessible
-kubectl exec -it <student-service-pod> -- curl mysql:3306
-
-# Check environment variables
-kubectl exec -it <student-service-pod> -- env | grep DB_
-```
-
-### Ingress Not Working
-
-```bash
-# Check Ingress controller is installed
-kubectl get pods -n ingress-nginx
-
-# View Ingress events
-kubectl describe ingress student-service-ingress
 ```
 
 ## Key Learnings and Best Practices
