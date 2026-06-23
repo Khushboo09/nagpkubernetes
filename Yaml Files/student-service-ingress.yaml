@@ -1,0 +1,20 @@
+# Ingress configuration for Student Service
+# Exposes the student service externally through an Ingress controller
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: student-service-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /students
+        pathType: Prefix
+        backend:
+          service:
+            name: student-service-mysql
+            port:
+              number: 9000
+
