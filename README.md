@@ -19,14 +19,19 @@ Both tiers are containerized using Docker and orchestrated on Google Kubernetes 
 - **Build Tool**: Maven
 - **Container Registry**: Docker Hub
 
+## Code Repository
+
+**Code Repository**: [https://github.com/Khushboo09/nagpkubernetes](https://github.com/Khushboo09/nagpkubernetes)
+
 ## Docker Image
 
 The Spring Boot application has been containerized and published to Docker Hub for deployment:
 
-**Code Repository**: [https://github.com/Khushboo09/nagpkubernetes](https://github.com/Khushboo09/nagpkubernetes)
 **Docker Hub Repository**: [khushboo091991/studentservice](https://hub.docker.com/r/khushboo091991/studentservice)  
 **Image Tag**: `khushboo091991/studentservice:0.0.1`
 **Image Tag**: `khushboo091991/studentservice:0.0.2`
+
+## Service API URL
 
 **Service API URL Example**: `http://<INGRESS-IP>/students`
 
