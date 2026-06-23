@@ -29,7 +29,6 @@ The Spring Boot application has been containerized and published to Docker Hub f
 
 **Docker Hub Repository**: [khushboo091991/studentservice](https://hub.docker.com/r/khushboo091991/studentservice)  
 **Image Tag**: `khushboo091991/studentservice:0.0.1`
-**Image Tag**: `khushboo091991/studentservice:0.0.2`
 
 ## Service API URL
 
@@ -37,30 +36,23 @@ The Spring Boot application has been containerized and published to Docker Hub f
 
 ## Project Structure
 
-```
-├── student-rest_service/           # Spring Boot application source code
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/com/student/   # Java source files
-│   │   │   └── resources/          # Application properties
-│   ├── Dockerfile                  # Docker image configuration
-│   └── pom.xml                     # Maven dependencies
-├── Yaml Files/                     # Kubernetes manifests
-│   ├── db-deployment.yaml          # MySQL deployment with PVC
-│   ├── mysql-configMap.yaml        # Database configuration
-│   ├── mysql-secrets.yaml          # Database credentials
-│   ├── student-service-deployment.yaml  # API service deployment
-│   ├── student-service-hpa.yaml    # Horizontal Pod Autoscaler
-│   └── student-service-ingress.yaml     # Ingress configuration
-└── student_db.sql                  # Database initialization script
-```
+The project is divided into the application code, Kubernetes deployment files, and the database script.
+
+- `student-rest_service` contains the Spring Boot REST API code.
+- Inside this folder, `src/main/java/com/student` has the Java classes and `src/main/resources` has the application properties.
+- The same folder also includes the `Dockerfile` used to build the service image and `pom.xml` for Maven dependencies.
+- `Yaml Files` contains all Kubernetes YAML files used for deployment.
+- `db-deployment.yaml` is used for the MySQL database deployment and persistent storage.
+- `mysql-configMap.yaml` and `mysql-secrets.yaml` store the database configuration and credentials.
+- `student-service-deployment.yaml`, `student-service-hpa.yaml`, and `student-service-ingress.yaml` are used to deploy, scale, and expose the student service.
+- `student_db.sql` contains the database schema and initial student records.
 
 ## API Endpoints
 
-| Endpoint | Method | Description | Response |
-|----------|--------|-------------|----------|
-| `/students` | GET | Retrieves all student records | JSON array of student objects |
-| `/students/health` | GET | Health check endpoint | `{healthy: true}` |
+The application exposes two simple endpoints. The main endpoint returns all student records from the database, while the health endpoint can be used to quickly check whether the service is running.
+
+- `GET /students` - Returns the list of students stored in the database.
+- `GET /students/health` - Used to check whether the student service is running properly.
 
 ### Sample Response
 
@@ -87,28 +79,24 @@ The Spring Boot application has been containerized and published to Docker Hub f
 
 ### Service API Tier Configuration
 
-| Feature | Implementation |
-|---------|----------------|
-| **Replicas** | 4 pods (scalable via HPA) |
-| **Deployment Strategy** | RollingUpdate (maxSurge: 1, maxUnavailable: 0) |
-| **Service Type** | ClusterIP (exposed via Ingress) |
-| **External Access** | NGINX Ingress Controller |
-| **ConfigMap** | Database host and name configuration |
-| **Secrets** | Database password (base64 encoded) |
-| **Resource Limits** | CPU: 100m-1000m, Memory: 128Mi-256Mi |
-| **HPA** | Min: 4, Max: 8 pods (80% CPU/Memory threshold) |
+- The student API service runs with 4 replicas, and it can scale further through HPA.
+- Rolling updates are enabled with `maxSurge: 1` and `maxUnavailable: 0`, so pods are replaced gradually.
+- The service is created as a `ClusterIP` service and is exposed outside the cluster through Ingress.
+- NGINX Ingress Controller is used for external access.
+- Database host and database name are managed through a ConfigMap.
+- Database password is stored in a Kubernetes Secret in base64 encoded format.
+- Resource requests and limits are configured with CPU between `100m` and `1000m`, and memory between `128Mi` and `256Mi`.
+- HPA is configured to run between 4 and 8 pods based on 80% CPU and memory usage.
 
 ### Database Tier Configuration
 
-| Feature | Implementation |
-|---------|----------------|
-| **Replicas** | 1 pod (StatefulSet pattern) |
-| **Deployment Strategy** | Recreate |
-| **Service Type** | ClusterIP (headless service) |
-| **Persistent Volume** | 100Mi PVC with ReadWriteOnce access |
-| **Access Scope** | Cluster-internal only |
-| **Resource Limits** | CPU: 250m-1000m, Memory: 512Mi-1Gi |
-| **Data Persistence** | Volume mounted at `/var/lib/mysql` |
+- The MySQL database runs as a single pod, following a stateful workload pattern.
+- The deployment strategy is set to `Recreate`, which is suitable for this database setup.
+- MySQL is exposed only inside the cluster using a headless `ClusterIP` service.
+- A `100Mi` PersistentVolumeClaim is used with `ReadWriteOnce` access.
+- The database is not exposed publicly and can only be accessed from inside the cluster.
+- Resource requests and limits are configured with CPU between `250m` and `1000m`, and memory between `512Mi` and `1Gi`.
+- Data is stored on the persistent volume mounted at `/var/lib/mysql`.
 
 ## FinOps Considerations
 
